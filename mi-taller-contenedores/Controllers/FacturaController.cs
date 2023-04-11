@@ -13,7 +13,8 @@ namespace mi_taller_contenedores.Controllers
         [HttpGet]
         public string GetFactura()
         {
-            throw new NotImplementedException();
+
+            return "Esto esuna factura";
         }
 
 
