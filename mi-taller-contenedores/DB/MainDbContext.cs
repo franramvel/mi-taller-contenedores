@@ -1,0 +1,15 @@
+﻿using mi_taller_contenedores.DB.Model;
+using Microsoft.EntityFrameworkCore;
+
+namespace mi_taller_contenedores.DB
+{
+    public class MainDbContext:DbContext
+    {
+        public MainDbContext(DbContextOptions<MainDbContext> options)
+        : base(options)
+        {
+        }
+
+        public virtual DbSet<Factura> TblFacturas { get; set; }
+    }
+}

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using mi_taller_contenedores.DB;
+using mi_taller_contenedores.DB.Model;
+using Microsoft.AspNetCore.Mvc;
 
 namespace mi_taller_contenedores.Controllers
 {
@@ -6,6 +8,7 @@ namespace mi_taller_contenedores.Controllers
     [Route("[controller]/[action]")]
     public class HelloWorldController:Controller
     {
+
         //La accion, son los métodos dentro de la clase controller
         [HttpGet]
         public string Respuesta()
@@ -74,9 +77,8 @@ namespace mi_taller_contenedores.Controllers
                 //Ok es http 200
                 return Ok("El registro se actualizo correctamente");
             }
-
-
-            return Json(new RespuestaJsonModel() { FechaSolicitud = DateTime.Now, Mensaje = $"Se actualizó el mensaje de {model.Remitente} y el nuevo mensaje es: '{model.Mensaje}'" });
         }
+
+
     }
 }
