@@ -1,4 +1,6 @@
 using mi_taller_contenedores.DB;
+using mi_taller_contenedores.Servicios.API;
+using mi_taller_contenedores.Servicios.Genericos;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MainDbContext>(cfg =>
 { cfg.UseInMemoryDatabase("InMemoryAppDb"); }
 );
+
+builder.Services.AddScoped<IFileManagementService, FileManagementService>();
+builder.Services.AddScoped<IFacturaServices, FacturaServices>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

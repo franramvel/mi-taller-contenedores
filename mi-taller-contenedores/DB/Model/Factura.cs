@@ -9,5 +9,6 @@
         public string UUID { get; set; }
         public int Pasajeros { get; set; }
         public decimal  MontoPorPasajero { get; set; }
+        public string  PathFileFactura { get; set; }
     }
 }

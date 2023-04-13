@@ -1,5 +1,6 @@
 ﻿using mi_taller_contenedores.DB;
 using mi_taller_contenedores.DB.Model;
+using mi_taller_contenedores.Servicios.API;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,12 @@ namespace mi_taller_contenedores.Controllers
     public class FacturaController : Controller
     {
         private readonly MainDbContext _ctx;
+        private readonly IFacturaServices _service;
 
-        public FacturaController(MainDbContext ctx)
+        public FacturaController(MainDbContext ctx,IFacturaServices service)
         {
             _ctx = ctx;
+            _service = service;
         }
 
         //La accion, son los métodos dentro de la clase controller
@@ -80,32 +83,8 @@ namespace mi_taller_contenedores.Controllers
         [HttpGet]
         public IActionResult GetMontosTotalesPaginadoIQueryable(int salto, int tamañoPagina)
         {
-            //List es el equivalente a ArrayList en java, o [] en python
-            var montos = new List<decimal>();
 
-            IQueryable<Factura> query =
-             (from factura in _ctx.TblFacturas
-              select new Factura
-              {
-                  Pasajeros= factura.Pasajeros,
-                  MontoPorPasajero= factura.MontoPorPasajero
-              });
-            //El total va antes del skip y el take
-            var totalDeRegistros = query.Count();
-
-            query.Skip(salto).Take(tamañoPagina);
-            //Si se pone despues, ya no devuelve el total, devuelve el ya filtrado
-            //var totalDeRegistros = query.Count(); ESTE NO VA AQUI
-
-            var facturas = query.ToList();
-
-            foreach (var factura in facturas)
-            {
-                var calculo = factura.Pasajeros * factura.MontoPorPasajero;
-                montos.Add(calculo);
-            }
-
-
+            var montos = _service.GetMontosTotalesPaginadoIQueryable(salto, tamañoPagina);
             return Json(montos);
         }
 
@@ -113,11 +92,7 @@ namespace mi_taller_contenedores.Controllers
         [HttpPost]
         public IActionResult Insert([FromBody] Factura factura)
         {
-            //Cuando llega la factura, aún no esta en la db
-            _ctx.TblFacturas.Add(factura);
-            //Si no llamamos al metodo save changes, la base de datos no se actualiza
-            _ctx.SaveChanges();
-            //EF lleva un tracking
+            var facturaIngresada = _service.Insert(factura);
             return Json(factura);
         }
 
