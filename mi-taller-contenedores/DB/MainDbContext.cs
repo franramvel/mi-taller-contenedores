@@ -9,7 +9,7 @@ namespace mi_taller_contenedores.DB
         : base(options)
         {
         }
-
+        //Definimos todas las tablas que van a estar en la base de datos
         public virtual DbSet<Factura> TblFacturas { get; set; }
     }
 }
