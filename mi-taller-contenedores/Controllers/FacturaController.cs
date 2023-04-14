@@ -1,4 +1,6 @@
-﻿using mi_taller_contenedores.DB;
+﻿using AutoMapper;
+using mi_taller_contenedores.ApiModels;
+using mi_taller_contenedores.DB;
 using mi_taller_contenedores.DB.Model;
 using mi_taller_contenedores.Servicios.API;
 using Microsoft.AspNetCore.Mvc;
@@ -12,11 +14,13 @@ namespace mi_taller_contenedores.Controllers
     {
         private readonly MainDbContext _ctx;
         private readonly IFacturaServices _service;
+        private readonly IMapper _mapper;
 
-        public FacturaController(MainDbContext ctx,IFacturaServices service)
+        public FacturaController(MainDbContext ctx,IFacturaServices service,IMapper mapper)
         {
             _ctx = ctx;
             _service = service;
+            _mapper = mapper;
         }
 
         //La accion, son los métodos dentro de la clase controller
@@ -89,11 +93,21 @@ namespace mi_taller_contenedores.Controllers
         }
 
         //La accion, son los métodos dentro de la clase controller
+        //Queremos obtener la informacion del form, que excluya los campos UUID y PathTestigo en el request, pero no en el response
         [HttpPost]
-        public IActionResult Insert([FromBody] Factura factura)
+        public IActionResult Insert([FromBody] FacturaFormModel facturaModel)
         {
+
+            //var factura = new Factura()
+            //{
+            //    RazonSocial = facturaModel.RazonSocial,
+            //    RFC = facturaModel.RFC,
+            //    Pasajeros = facturaModel.Pasajeros,
+            //    MontoPorPasajero = facturaModel.MontoPorPasajero
+            //};
+            var factura = _mapper.Map<Factura>(facturaModel);
             var facturaIngresada = _service.Insert(factura);
-            return Json(factura);
+            return Json(_mapper.Map<FacturaFormModel>(facturaIngresada));
         }
 
     }

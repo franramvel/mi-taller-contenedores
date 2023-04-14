@@ -1,3 +1,5 @@
+using AutoMapper;
+using mi_taller_contenedores.ApiModels.MappingProfiles;
 using mi_taller_contenedores.DB;
 using mi_taller_contenedores.Servicios.API;
 using mi_taller_contenedores.Servicios.Genericos;
@@ -14,6 +16,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MainDbContext>(cfg =>
 { cfg.UseInMemoryDatabase("InMemoryAppDb"); }
 );
+//Mapper
+var mapperConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AllowNullDestinationValues = true;
+    cfg.AddProfile(new MainMappingProfile());
+});
+var mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.AddScoped<IFileManagementService, FileManagementService>();
 builder.Services.AddScoped<IFacturaServices, FacturaServices>();
