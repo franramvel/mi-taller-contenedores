@@ -1,5 +1,7 @@
 ﻿using mi_taller_contenedores.DB;
 using mi_taller_contenedores.DB.Model;
+using mi_taller_contenedores.DB.Query;
+using mi_taller_contenedores.DB.Query.Interfaces;
 using mi_taller_contenedores.Servicios.Genericos;
 
 namespace mi_taller_contenedores.Servicios.API
@@ -8,13 +10,24 @@ namespace mi_taller_contenedores.Servicios.API
     {
         private readonly MainDbContext _ctx;
         private readonly IFileManagementService _fileManagementService;
+        private readonly IQueryDispatcher _qdispatcher;
 
-        public FacturaServices(MainDbContext ctx, IFileManagementService fileManagementService)
+        public FacturaServices(MainDbContext ctx, IFileManagementService fileManagementService,
+            IQueryDispatcher _qdispatcher)
         {
             _ctx = ctx;
             _fileManagementService = fileManagementService;
+            this._qdispatcher = _qdispatcher;
         }
 
+        public async Task<Factura> Get(int id,CancellationToken token)
+        {
+            //se hace logica de negocios si es necesaria antes o despues del QO
+            var query = new QueryGetFacturacion(id);
+            var result = await _qdispatcher.Dispatch<QueryGetFacturacion, Factura>
+                        (query, token);
+            return result;
+        }
         public Factura Insert(Factura factura)
         {
             //LOGICA DE NEGOCIOS
@@ -28,8 +41,6 @@ namespace mi_taller_contenedores.Servicios.API
             factura.PathFileFactura = pathGuardado;
 
             //FIN LOGICA DE NEGOCIOS
-
-
             //Cuando llega la factura, aún no esta en la db
             _ctx.TblFacturas.Add(factura);
             //Si no llamamos al metodo save changes, la base de datos no se actualiza
@@ -39,35 +50,14 @@ namespace mi_taller_contenedores.Servicios.API
             return factura;
         }
 
-        public IEnumerable<decimal> GetMontosTotalesPaginadoIQueryable(int salto, int tamañoPagina)
+        public async Task<IEnumerable<decimal>> GetMontosTotalesPaginado(int salto, int tamañoPagina,CancellationToken cancellation)
         {
             //List es el equivalente a ArrayList en java, o [] en python
-            var montos = new List<decimal>();
-
-            IQueryable<Factura> query =
-             (from factura in _ctx.TblFacturas
-              select new Factura
-              {
-                  Pasajeros = factura.Pasajeros,
-                  MontoPorPasajero = factura.MontoPorPasajero
-              });
-            //El total va antes del skip y el take
-            var totalDeRegistros = query.Count();
-
-            query.Skip(salto).Take(tamañoPagina);
-            //Si se pone despues, ya no devuelve el total, devuelve el ya filtrado
-            //var totalDeRegistros = query.Count(); ESTE NO VA AQUI
-
-            var facturas = query.ToList();
-
-            foreach (var factura in facturas)
-            {
-                var calculo = factura.Pasajeros * factura.MontoPorPasajero;
-                montos.Add(calculo);
-            }
-
-
-            return montos;
+            //se hace logica de negocios si es necesaria antes o despues del QO
+            var query = new QueryGetMontosTotalesPaginado(salto,tamañoPagina);
+            var result = await _qdispatcher.Dispatch<QueryGetMontosTotalesPaginado, IEnumerable<decimal>>
+                        (query, cancellation);
+            return result;
         }
     }
 }

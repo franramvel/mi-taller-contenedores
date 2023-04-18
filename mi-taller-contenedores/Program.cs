@@ -1,6 +1,8 @@
 using AutoMapper;
 using mi_taller_contenedores.ApiModels.MappingProfiles;
 using mi_taller_contenedores.DB;
+using mi_taller_contenedores.DB.Query;
+using mi_taller_contenedores.DB.Query.Interfaces;
 using mi_taller_contenedores.Servicios.API;
 using mi_taller_contenedores.Servicios.Genericos;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +29,17 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddScoped<IFileManagementService, FileManagementService>();
 builder.Services.AddScoped<IFacturaServices, FacturaServices>();
+builder.Services.AddScoped<IQueryDispatcher, QueryDispatcher>();
+builder.Services.Scan(selector =>
+{
+    selector.FromAssemblyOf<IQueryDispatcher>()
+            .AddClasses(filter =>
+            {
+                filter.AssignableTo(typeof(IQueryHandler<,>));
+            })
+            .AsImplementedInterfaces()
+            .WithScopedLifetime();
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

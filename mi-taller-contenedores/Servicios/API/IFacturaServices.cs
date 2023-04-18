@@ -4,7 +4,8 @@ namespace mi_taller_contenedores.Servicios.API
 {
     public interface IFacturaServices
     {
-        IEnumerable<decimal> GetMontosTotalesPaginadoIQueryable(int salto, int tamañoPagina);
+        Task<Factura> Get(int id, CancellationToken token);
+        Task<IEnumerable<decimal>> GetMontosTotalesPaginado(int salto, int tamañoPagina, CancellationToken cancellation);
         Factura Insert(Factura factura);
     }
 }
