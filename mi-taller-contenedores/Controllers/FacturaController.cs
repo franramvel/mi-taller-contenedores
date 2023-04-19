@@ -12,13 +12,11 @@ namespace mi_taller_contenedores.Controllers
     [Route("[controller]/[action]")]
     public class FacturaController : Controller
     {
-        private readonly MainDbContext _ctx;
         private readonly IFacturaServices _service;
         private readonly IMapper _mapper;
 
-        public FacturaController(MainDbContext ctx,IFacturaServices service,IMapper mapper)
+        public FacturaController(IFacturaServices service,IMapper mapper)
         {
-            _ctx = ctx;
             _service = service;
             _mapper = mapper;
         }
@@ -32,32 +30,15 @@ namespace mi_taller_contenedores.Controllers
         }
 
         //La accion, son los métodos dentro de la clase controller
-        [HttpGet("{nombre}")]
-        public IActionResult GetByNombre(string razonSocial)
+        [HttpGet("{razonSocial}")]
+        public async Task<IActionResult> GetByNombre(string razonSocial,CancellationToken cancellation)
         {
             //@nombre varchar
             //select * from TblFacturas where RazonSocial Like '%@RazonSocial%'
-            var resultado = _ctx.TblFacturas.Where(factura => factura.RazonSocial.Contains(razonSocial)).ToList();
-            return Json(resultado);
+            var factura = await _service.GetByRazonSocial(razonSocial, cancellation);
+            return Json(factura);
         }
 
-        [HttpGet]
-        public IActionResult GetMontosTotales()
-        {
-            //List es el equivalente a ArrayList en java, o [] en python
-            var montos = new List<decimal>();
-            //Obtener nuestra lista de facturas
-            var facturas = _ctx.TblFacturas
-                .ToList();
-
-            foreach (var factura in facturas)
-            {
-                var calculo = factura.Pasajeros * factura.MontoPorPasajero;
-                montos.Add(calculo);
-            }
-
-            return Json(montos);
-        }
 
         [HttpGet]
         public async Task<IActionResult> GetMontosTotalesPaginado(int salto,int tamañoPagina,CancellationToken cancellation)

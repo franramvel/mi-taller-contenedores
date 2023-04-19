@@ -1,5 +1,6 @@
 using AutoMapper;
 using DB.Command.Interfaces;
+using mi_taller_contenedores;
 using mi_taller_contenedores.ApiModels.MappingProfiles;
 using mi_taller_contenedores.DB;
 using mi_taller_contenedores.DB.Command;
@@ -33,6 +34,8 @@ builder.Services.AddScoped<IFileManagementService, FileManagementService>();
 builder.Services.AddScoped<IFacturaServices, FacturaServices>();
 builder.Services.AddScoped<IQueryDispatcher, QueryDispatcher>();
 builder.Services.AddScoped<ICommandDispatcher, CommandDispatcher>();
+builder.Services.AddTransient<Seeder>();
+
 builder.Services.Scan(selector =>
 {
     selector.FromAssemblyOf<IQueryDispatcher>()
@@ -54,7 +57,7 @@ builder.Services.Scan(selector =>
             .WithScopedLifetime();
 });
 var app = builder.Build();
-
+await SeedDataAsync(app);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -69,3 +72,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+async Task SeedDataAsync(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<Seeder>();
+        await service.SeedAsync();
+    }
+}

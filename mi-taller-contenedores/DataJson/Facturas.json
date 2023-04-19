@@ -1,0 +1,74 @@
+[
+  {
+    "Id": 1,
+    "RazonSocial": "Empresa A",
+    "RFC": "123456789",
+    "UUID": "abcd1234",
+    "Pasajeros": 5,
+    "MontoPorPasajero": 100.50,
+    "PathFileFactura": "/facturas/empresaA-2023-04-01.pdf"
+  },
+  {
+    "Id": 2,
+    "RazonSocial": "Empresa B",
+    "RFC": "987654321",
+    "UUID": "efgh5678",
+    "Pasajeros": 10,
+    "MontoPorPasajero": 75.25,
+    "PathFileFactura": "/facturas/empresaB-2023-03-15.pdf"
+  },
+  {
+    "Id": 3,
+    "RazonSocial": "Empresa C",
+    "RFC": "456789123",
+    "UUID": "ijkl9012",
+    "Pasajeros": 2,
+    "MontoPorPasajero": 200.75,
+    "PathFileFactura": "/facturas/empresaC-2023-02-28.pdf"
+  },
+  {
+    "Id": 4,
+    "RazonSocial": "Empresa D",
+    "RFC": "321654987",
+    "UUID": "mnop3456",
+    "Pasajeros": 7,
+    "MontoPorPasajero": 150.00,
+    "PathFileFactura": "/facturas/empresaD-2023-01-20.pdf"
+  },
+  {
+    "Id": 5,
+    "RazonSocial": "Empresa E",
+    "RFC": "654321789",
+    "UUID": "qrstuv789",
+    "Pasajeros": 12,
+    "MontoPorPasajero": 60.25,
+    "PathFileFactura": "/facturas/empresaE-2023-04-10.pdf"
+  },
+  {
+    "Id": 6,
+    "RazonSocial": "Empresa F",
+    "RFC": "987123654",
+    "UUID": "wxyz1234",
+    "Pasajeros": 4,
+    "MontoPorPasajero": 180.50,
+    "PathFileFactura": "/facturas/empresaF-2023-03-03.pdf"
+  },
+  {
+    "Id": 7,
+    "RazonSocial": "Empresa G",
+    "RFC": "321789654",
+    "UUID": "abcdef12",
+    "Pasajeros": 8,
+    "MontoPorPasajero": 120.75,
+    "PathFileFactura": "/facturas/empresaG-2023-02-15.pdf"
+  },
+  {
+    "Id": 8,
+    "RazonSocial": "Empresa H",
+    "RFC": "654987123",
+    "UUID": "ghijkl34",
+    "Pasajeros": 3,
+    "MontoPorPasajero": 250.00,
+    "PathFileFactura": "/facturas/empresaH-2023-01-28.pdf"
+  }
+]

@@ -32,6 +32,17 @@ namespace mi_taller_contenedores.Servicios.API
                         (query, token);
             return result;
         }
+
+        public async Task<Factura> GetByRazonSocial(string razonSocial, CancellationToken token)
+        {
+            //se hace logica de negocios si es necesaria antes o despues del QO
+            var query = new QueryGetFacturacionByRazonSocial(razonSocial);
+            var result = await _qdispatcher.Dispatch<QueryGetFacturacionByRazonSocial, Factura>
+                        (query, token);
+            return result;
+        }
+
+
         public async Task<Factura> Insert(Factura factura)
         {
             //LOGICA DE NEGOCIOS
