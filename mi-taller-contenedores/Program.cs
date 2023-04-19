@@ -1,6 +1,8 @@
 using AutoMapper;
+using DB.Command.Interfaces;
 using mi_taller_contenedores.ApiModels.MappingProfiles;
 using mi_taller_contenedores.DB;
+using mi_taller_contenedores.DB.Command;
 using mi_taller_contenedores.DB.Query;
 using mi_taller_contenedores.DB.Query.Interfaces;
 using mi_taller_contenedores.Servicios.API;
@@ -30,12 +32,23 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<IFileManagementService, FileManagementService>();
 builder.Services.AddScoped<IFacturaServices, FacturaServices>();
 builder.Services.AddScoped<IQueryDispatcher, QueryDispatcher>();
+builder.Services.AddScoped<ICommandDispatcher, CommandDispatcher>();
 builder.Services.Scan(selector =>
 {
     selector.FromAssemblyOf<IQueryDispatcher>()
             .AddClasses(filter =>
             {
                 filter.AssignableTo(typeof(IQueryHandler<,>));
+            })
+            .AsImplementedInterfaces()
+            .WithScopedLifetime();
+});
+builder.Services.Scan(selector =>
+{
+    selector.FromAssemblyOf<ICommandDispatcher>()
+            .AddClasses(filter =>
+            {
+                filter.AssignableTo(typeof(ICommandHandler<,>));
             })
             .AsImplementedInterfaces()
             .WithScopedLifetime();

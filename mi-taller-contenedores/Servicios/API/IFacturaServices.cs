@@ -6,6 +6,8 @@ namespace mi_taller_contenedores.Servicios.API
     {
         Task<Factura> Get(int id, CancellationToken token);
         Task<IEnumerable<decimal>> GetMontosTotalesPaginado(int salto, int tamañoPagina, CancellationToken cancellation);
-        Factura Insert(Factura factura);
+        Task<Factura> Insert(Factura factura);
+        Task<Factura> Update(Factura factura);
+        Task<(int, string)> UpdatePasajeros(int id, int pasajeros);
     }
 }
